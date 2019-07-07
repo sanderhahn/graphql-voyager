@@ -24,6 +24,7 @@ export interface VoyagerDisplayOptions {
   skipRelay?: boolean;
   skipDeprecated?: boolean;
   showLeafFields?: boolean;
+  skipHasuraAggregates?: boolean;
   sortByAlphabet?: boolean;
   hideRoot?: boolean;
 }
@@ -34,6 +35,7 @@ const defaultDisplayOptions = {
   skipDeprecated: true,
   sortByAlphabet: false,
   showLeafFields: true,
+  skipHasuraAggregates: true,
   hideRoot: false,
 };
 
@@ -63,6 +65,7 @@ export default class Voyager extends React.Component<VoyagerProps> {
       sortByAlphabet: PropTypes.bool,
       hideRoot: PropTypes.bool,
       showLeafFields: PropTypes.bool,
+      skipHasuraAggregates: PropTypes.bool,
     }),
     hideDocs: PropTypes.bool,
     hideSettings: PropTypes.bool,
@@ -130,6 +133,7 @@ export default class Voyager extends React.Component<VoyagerProps> {
       displayOptions.sortByAlphabet,
       displayOptions.skipRelay,
       displayOptions.skipDeprecated,
+      displayOptions.skipHasuraAggregates,
     );
     const typeGraph = getTypeGraph(schema, displayOptions.rootType, displayOptions.hideRoot);
 

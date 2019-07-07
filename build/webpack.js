@@ -80,7 +80,7 @@ module.exports = (env = {}, { mode }) => ({
               loader: 'css-loader',
               options: {
                 sourceMap: true,
-                minimize: true,
+                // minimize: true,
               },
             },
             'postcss-loader?sourceMap',

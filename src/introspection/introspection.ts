@@ -202,6 +202,35 @@ function markDeprecated(schema: SimplifiedIntrospectionWithIds): void {
   // which are deprecated.
 }
 
+function markHasuraAggregates(schema: SimplifiedIntrospectionWithIds): void {
+  const suffixes = [
+    "_aggregate",
+    "_aggregate_fields",
+    "_avg_fields",
+    "_max_fields",
+    "_min_fields",
+    "_stddev_fields",
+    "_stddev_pop_fields",
+    "_stddev_samp_fields",
+    "_sum_fields",
+    "_var_pop_fields",
+    "_var_samp_fields",
+    "_variance_fields",
+  ];
+  function isAggregateSuffix(name) {
+    for (const suffix of suffixes) {
+      if (name.endsWith(suffix)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  _.each(schema.types, type => {
+    type.fields = _.pickBy(type.fields, field => !field.name.endsWith("_aggregate"));
+  });
+  schema.types = _.pickBy(schema.types, field => !isAggregateSuffix(field.name));
+}
+
 function assignTypesAndIDs(schema: SimplifiedIntrospection) {
   (<any>schema).queryType = schema.types[schema.queryType];
   (<any>schema).mutationType = schema.types[schema.mutationType];
@@ -254,6 +283,7 @@ export function getSchema(
   sortByAlphabet: boolean,
   skipRelay: boolean,
   skipDeprecated: boolean,
+  skipHasuraAggregates: boolean,
 ) {
   if (!introspection) return null;
 
@@ -272,6 +302,9 @@ export function getSchema(
   }
   if (skipDeprecated) {
     markDeprecated((<any>simpleSchema) as SimplifiedIntrospectionWithIds);
+  }
+  if (skipHasuraAggregates) {
+    markHasuraAggregates((<any>simpleSchema) as SimplifiedIntrospectionWithIds);
   }
   return simpleSchema;
 }

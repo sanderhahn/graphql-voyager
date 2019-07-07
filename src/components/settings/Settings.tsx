@@ -50,6 +50,13 @@ export default class Settings extends React.Component<SettingsProps> {
             onChange={event => onChange({ showLeafFields: event.target.checked })}
           />
           <label htmlFor="showLeafFields">Show leaf fields</label>
+          <Checkbox
+            id="skipHasuraAggregates"
+            color="primary"
+            checked={!!options.skipHasuraAggregates}
+            onChange={event => onChange({ skipHasuraAggregates: event.target.checked })}
+          />
+          <label htmlFor="skipHasuraAggregates">Skip Hasura aggregates</label>
         </div>
       </div>
     );
